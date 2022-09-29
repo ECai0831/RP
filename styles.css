@@ -1,0 +1,89 @@
+/* -----------------Class CSS -----------------*/
+.about-author{
+    color:#2c1212
+}
+
+.author{
+    background-color: #EEE;
+}
+
+.footer {
+    background-color: #2c1212;
+}
+
+.font-italic{
+    font-style: italic;
+}
+
+.icon-white{
+    color: #EEE;
+}
+.overview{
+    background-color: #AAA;
+}
+
+.showcase{
+    background-color: #EEE;
+}
+
+.nb-bg-color{
+    background-color: #2c1212;
+}
+
+/* -----------------ID CSS -----------------*/
+/*#nug1{
+    width: 10%;
+    height: auto;
+    position: fixed;
+    left: 500px;
+    bottom: 100px;
+    display: inline;
+}*/
+
+a #nbMenuItem{
+    font-size: 50px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+div #about{
+    width: 400px;
+    margin: auto;
+}
+
+#ovPadLeft{
+    padding-left: 20px;
+}
+
+#ovPadRight {
+    padding-right: 20px;
+}
+
+#title {
+    color:#2c1212;
+}
+
+/* -----------------Underline Animation CSS -----------------*/
+.hover-underline-animation {
+    display: inline-block;
+    position: relative;
+    /*color: #0087ca;*/
+  }
+  
+.hover-underline-animation:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #eae6e6;
+    /*transform-origin: bottom right;*/
+    transition: transform 0.35s ease-out;
+}
+  
+.hover-underline-animation:hover:after {
+    transform: scaleX(1);
+    /*transform-origin: bottom left;*/
+}
