@@ -4,7 +4,7 @@
 }
 
 .author{
-    background-color: #EEE;
+    background-color: hsl(80, 15%, 92%);
 }
 
 .footer {
@@ -16,14 +16,20 @@
 }
 
 .icon-white{
-    color: #EEE;
+    color: hsl(80, 15%, 92%);
 }
+
+.logo{
+    width: 80px;
+}
+
 .overview{
-    background-color: #AAA;
+    color:#2c1212;
+    background-color: hsl(80, 15%, 92%);
 }
 
 .showcase{
-    background-color: #EEE;
+    background-color: hsl(0, 0%, 100%);
 }
 
 .nb-bg-color{
@@ -31,15 +37,6 @@
 }
 
 /* -----------------ID CSS -----------------*/
-/*#nug1{
-    width: 10%;
-    height: auto;
-    position: fixed;
-    left: 500px;
-    bottom: 100px;
-    display: inline;
-}*/
-
 a #nbMenuItem{
     font-size: 50px;
     padding-right: 20px;
@@ -61,6 +58,7 @@ div #about{
 
 #title {
     color:#2c1212;
+    font-weight: 400;
 }
 
 /* -----------------Underline Animation CSS -----------------*/
