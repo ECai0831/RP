@@ -1,11 +1,12 @@
-// This JS file is for registering a new app user ---------------------------//
+// This JS file is for managing data ---------------------------//
 
-// ----------------- Firebase Setup & Initialization ------------------------//
+/// ----------------- Firebase Setup & Initialization ------------------------//
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
 import {
 	getAuth,
+	signOut,
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -21,13 +22,13 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAEVE-SXtl_CEMLEuDTRkfOPU7Wo4Nxr08",
-  authDomain: "research-website-1a6ab.firebaseapp.com",
-  databaseURL: "https://research-website-1a6ab-default-rtdb.firebaseio.com",
-  projectId: "research-website-1a6ab",
-  storageBucket: "research-website-1a6ab.appspot.com",
-  messagingSenderId: "298521542381",
-  appId: "1:298521542381:web:efe159951d66ed1c2996e4"
+  apiKey: "AIzaSyBg2zApspKowyOwlIuz7voq2549cgjbIQw",
+  authDomain: "fir-intro-demo.firebaseapp.com",
+  databaseURL: "https://fir-intro-demo-default-rtdb.firebaseio.com",
+  projectId: "fir-intro-demo",
+  storageBucket: "fir-intro-demo.appspot.com",
+  messagingSenderId: "491851960615",
+  appId: "1:491851960615:web:d69b821b480f13b4f35902"
 };
 
 // Initialize Firebase
@@ -60,8 +61,7 @@ function getUsername() {
 	currentUser = currentUser.accountInfo;
 }
 
-// Sign-out function that will remove user info from local/session storage and
-// sign-out from FRD
+// Sign-out function that will remove user info from local/session storage and sign-out from FRD
 function signOutUser() {
 	// Clear session and localStorage
 	sessionStorage.removeItem("user");
@@ -74,10 +74,10 @@ function signOutUser() {
 }
 
 // ------------------------Set (insert) data into FRD ------------------------
-function setData(year, month, day, temp, userID) {
+function setData(trialNum, temp, sg, brix, mass, userID) {
 	// Set the data
-	set(ref(db, `users/${userID}/data/${year}/${month}`), {
-		[day]: temp,
+	set(ref(db, `users/${userID}/data/${trialNum}`), {
+		[temp]: { sg, brix, mass }
 	})
 		.then(() => {
 			alert("Data saved successfully!");
@@ -88,13 +88,14 @@ function setData(year, month, day, temp, userID) {
 }
 
 document.getElementById("set").onclick = function () {
-	const year = document.getElementById("year").value;
-	const month = document.getElementById("month").value;
-	const day = document.getElementById("day").value;
-	const temp = document.getElementById("temperature").value;
+	const trialNum = document.getElementById("trialNum").value;
+	const temp = document.getElementById("temp").value;
+	const sg = document.getElementById("sg").value;
+	const brix = document.getElementById("brix").value;
+	const mass = document.getElementById("mass").value;
 	const userID = currentUser.uid;
 
-	setData(year, month, day, temp, userID);
+	setData(trialNum, temp, sg, brix, mass, userID);
 };
 
 // -------------------------Update data in database --------------------------
@@ -121,15 +122,93 @@ document.getElementById("update").onclick = function () {
 	updateData(year, month, day, temp, userID);
 };
 
-// ----------------------Get a datum from FRD (single data point)---------------
 
-// ---------------------------Get a month's data set --------------------------
-// Must be an async function because you need to get all the data from FRD
-// before you can process it for a table or graph
+// Get a data set function call
+async function getDataSet(userID, year, month){
+	let tempVal = document.getElementById('setTempVal');
+	//let monthVal = document.getElementById('setMonthVal');
 
-// Add a item to the table of data
+	tempVal.textContent = `Temperature: ${temp}`;
+	//monthVal.textContent = `Month: ${month}`;
 
-// -------------------------Delete a day's data from FRD ---------------------
+	const days = []
+	const temps = []
+	const tbodyEL = document.getElementById('tbody-2'); //select <tbody> from table
+
+	const dbref = ref(db);
+
+	//wait for data to be pulled from FRD
+	//provide path through the nodes to the data
+	await get(child(dbref, 'users/' + userID + '/data/' + year + '/' + month)).then((snapshot)=>{
+		if(snapshot.exists()){
+			console.log(snapshot.val());
+
+			snapshot.forEach(child =>{
+				console.log(child.key, child.val());
+				// push values to the correct arrays
+				days.push(child.key);
+				temps.push(child.val());
+			});
+		}
+		else{
+			alert('No data found')
+		}
+	})
+	.catch((error)=>{
+		alert('unsuccessful, error ' + error);
+	})
+
+	//dynamically add table rows to HTML
+	for(let i = 0; i < days.length; i++){
+		addItemToTable(days[i], temps[i], tbodyEL)
+	}
+}
+
+//add an item to the table
+function addItemToTable(day, temp, tbody){
+	console.log(day, temp);
+	let tRow = document.createElement("tr")		//create table row
+	let td1 = document.createElement("td")		//column 1
+	let td2 = document.createElement("td")		//column 2
+
+	td1.innerHTML = day;
+	td2.innerHTML = temp;
+
+	tRow.appendChild(td1)
+	tRow.appendChild(td2)
+
+	tbody.appendChild(tRow);
+}
+
+//call data set function
+document.getElementById('getDataSet').onclick = function(){
+	const year = document.getElementById('getSetYear').value;
+	const month = document.getElementById('getSetMonth').value;
+	const userID = currentUser.uid;
+
+	getDataSet(userID, year, month);
+}
+
+// Delete a single day's data function call
+function deleteData(userID, year, month, day){
+	remove(ref(db, 'users/' + '/data/' + year + '/' + month + '/' + day))
+	.then(()=>{
+		alert('Data removed successfully.');
+	})
+	.catch((error)=>{
+		alert('unsuccessful, error: ' + error);
+	});
+}
+
+//call delete data function
+document.getElementById('delete').onclick = function(){
+	const year = document.getElementById('delYear').value;
+	const month = document.getElementById('delMonth').value;
+	const day = document.getElementById('delDay').value;
+	const userID = currentUser.uid;
+
+	deleteData(userID, year, month, day);
+}
 
 // --------------------------- Home Page Loading -----------------------------
 
@@ -166,12 +245,6 @@ window.onload = function () {
 };
 
 // ------------------------- Set Welcome Message -------------------------
-
-// Get, Set, Update, Delete Sharkriver Temp. Data in FRD
-// Set (Insert) data function call
-
-// Update data function call
-
 // Get a datum function call
 function getDatum(userID, year, month, day) {
 	// Get the data
@@ -205,7 +278,3 @@ document.getElementById("get").onclick = function () {
 
 	getDatum(currentUser.uid, year, month, day);
 }
-
-// Get a data set function call
-
-// Delete a single day's data function call

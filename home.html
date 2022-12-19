@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" 
             defer integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" 
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="module" src="js/home.js" defer></script>
+    <script type="module" src="home.js" defer></script>
 </head>
 <body>
     <!-- Navbar -->
@@ -56,6 +56,9 @@
                 <li class="nav-item">
                     <a href="signIn.html" class="nav-link hover-underline-animation" id="nbMenuItem">Sign In</a>
                 </li>
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link hover-underline-animation" id="nbMenuItem">Sign Out</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -82,15 +85,15 @@
                     <option value="1">1</option>
                     <option value="2">2</option>
                 </select>
-                <select class="form-select mb-3" aria-label="Default select example" id="month">
+                <select class="form-select mb-3" aria-label="Default select example" id="temp">
                     <option selected>Treatment Temperature (&deg;C)</option>
                     <option value="control">27&deg;C / 22&deg;C</option>
                     <option value="high">12&deg;C / 8&deg;C</option>
                     <option value="low">4&deg;C / 0&deg;C</option>
                 </select>
-                <input type="text" class="form-control mb-3" placeholder="Specific Gravity" id="temperature">
-                <input type="text" class="form-control mb-3" placeholder="Brix (%)" id="temperature">
-                <input type="text" class="form-control mb-3" placeholder="mass (mg)" id="temperature">
+                <input type="text" class="form-control mb-3" placeholder="Specific Gravity" id="sg">
+                <input type="text" class="form-control mb-3" placeholder="Brix (%)" id="brix">
+                <input type="text" class="form-control mb-3" placeholder="mass (mg)" id="mass">
                 <button type = "button" id="set" name="set" class="btn btn-outline-primary mb-3 w-100">Set</button>
                 <button type = "button" id="update" name="update" class="btn btn-outline-secondary mb-3 w-100">Update</button>
             </form>       
@@ -111,7 +114,7 @@
                     <option value="1">1</option>
                     <option value="2">2</option>
                 </select>
-                <select class="form-select mb-3" aria-label="Default select example" id="month">
+                <select class="form-select mb-3" aria-label="Default select example" id="temp">
                     <option selected>Treatment Temperature (&deg;C)</option>
                     <option value="control">27&deg;C / 22&deg;C</option>
                     <option value="high">12&deg;C / 8&deg;C</option>
@@ -125,18 +128,20 @@
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">Year</th>
-                <th scope="col">Month</th>
-                <th scope="col">Day</th>
-                <th scope="col">Temperature (°F)</th>
+                <th scope="col">Trial</th>
+                <th scope="col">Temperature (&deg;C)</th>
+                <th scope="col">Specific Gravity</th>
+                <th scope="col">Brix (%)</th>
+                <th scope="col">Mass (mg)</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><p id ="yearVal"></p></td>
-                <td><p id ="monthVal"></td>
-                <td><p id ="dayVal"></td>
-                <td><p id ="tempVal"></p></td>
+                <td><p id ="trialNum"></p></td>
+                <td><p id ="temp"></td>
+                <td><p id ="sg"></td>
+                <td><p id ="brix"></p></td>
+                <td><p id ="mass"></p></td>
               </tr>
               <tr>
             </tbody>
@@ -152,7 +157,7 @@
         
         <div class="container dataForm mb-5">
             <form>
-                <select class="form-select mb-3" aria-label="Default select example" id="month">
+                <select class="form-select mb-3" aria-label="Default select example" id="temp">
                     <option selected>Treatment Temperature (&deg;C)</option>
                     <option value="control">27&deg;C / 22&deg;C</option>
                     <option value="high">12&deg;C / 8&deg;C</option>
@@ -163,8 +168,7 @@
         </div>
 
         <div>
-            <h5 id="setYearVal"></h5>
-            <h5 id="setMonthVal"></h5>
+            <h5 id="setTempVal"></h5>
         </div>
 
         <!-- Table for displaying data set -->
@@ -172,8 +176,10 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Day</th>
-                    <th scope="col">Temperature (°F)</th>
+                    <th scope="col">Temperature (&deg;C)</th>
+                    <th scope="col">Specific Gravity</th>
+                    <th scope="col">Brix (%)</th>
+                    <th scope="col">Mass (mg)</th>
                 </tr>
                 </thead>
                 <tbody id = "tbody-2">
@@ -199,7 +205,7 @@
                     <option value="1">1</option>
                     <option value="2">2</option>
                 </select>
-                <select class="form-select mb-3" aria-label="Default select example" id="month">
+                <select class="form-select mb-3" aria-label="Default select example" id="temp">
                     <option selected>Treatment Temperature (&deg;C)</option>
                     <option value="control">27&deg;C / 22&deg;C</option>
                     <option value="high">12&deg;C / 8&deg;C</option>

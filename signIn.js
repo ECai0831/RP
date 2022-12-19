@@ -1,4 +1,4 @@
-// This JS file is for registering a new app user ---------------------------//
+// This JS file is for signing in a user ---------------------------//
 
 // ----------------- Firebase Setup & Initialization ------------------------//
 // Import the functions you need from the SDKs you need
@@ -21,13 +21,13 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAEVE-SXtl_CEMLEuDTRkfOPU7Wo4Nxr08",
-  authDomain: "research-website-1a6ab.firebaseapp.com",
-  databaseURL: "https://research-website-1a6ab-default-rtdb.firebaseio.com",
-  projectId: "research-website-1a6ab",
-  storageBucket: "research-website-1a6ab.appspot.com",
-  messagingSenderId: "298521542381",
-  appId: "1:298521542381:web:efe159951d66ed1c2996e4"
+  apiKey: "AIzaSyBg2zApspKowyOwlIuz7voq2549cgjbIQw",
+  authDomain: "fir-intro-demo.firebaseapp.com",
+  databaseURL: "https://fir-intro-demo-default-rtdb.firebaseio.com",
+  projectId: "fir-intro-demo",
+  storageBucket: "fir-intro-demo.appspot.com",
+  messagingSenderId: "491851960615",
+  appId: "1:491851960615:web:d69b821b480f13b4f35902"
 };
 
 // Initialize Firebase
@@ -73,7 +73,7 @@ document.getElementById("signIn").onclick = function () {
 		.catch((error) => {
 			const errorCode = error.code;
 			const errorMessage = error.message;
-			alert(errorMessage + "YEYEYEYEYEYEYEY");
+			alert(errorMessage);
 		});
 };
 
