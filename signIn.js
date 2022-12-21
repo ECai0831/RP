@@ -83,7 +83,7 @@ function logIn(user) {
 
 	if (!keepLoggedIn) {
 		sessionStorage.setItem("user", JSON.stringify(user));
-		alert("Wawaweewa");
+		alert("no");
 		window.location = "home.html";
 	} else {
 		localStorage.setItem("keepLoggedIn", "yes");

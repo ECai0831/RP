@@ -99,10 +99,10 @@ document.getElementById("set").onclick = function () {
 };
 
 // -------------------------Update data in database --------------------------
-function updateData(year, month, day, temp, userID) {
-	// Set the data
-	update(ref(db, `users/${userID}/data/${year}/${month}`), {
-		[day]: temp,
+function updateData(trialNum, temp, sg, brix, mass, userID) {
+	// Update the data
+	update(ref(db, `users/${userID}/data/${trialNum}`), {
+		[temp]: { sg, brix, mass }
 	})
 		.then(() => {
 			alert("Data updated successfully!");
@@ -113,41 +113,82 @@ function updateData(year, month, day, temp, userID) {
 }
 
 document.getElementById("update").onclick = function () {
-	const year = document.getElementById("year").value;
-	const month = document.getElementById("month").value;
-	const day = document.getElementById("day").value;
-	const temp = document.getElementById("temperature").value;
+	const trialNum = document.getElementById("trialNum").value;
+	const temp = document.getElementById("temp").value;
+	const sg = document.getElementById("sg").value;
+	const brix = document.getElementById("brix").value;
+	const mass = document.getElementById("mass").value;
 	const userID = currentUser.uid;
 
-	updateData(year, month, day, temp, userID);
+	updateData(trialNum, temp, sg, brix, mass, userID);
 };
 
+// -------------------------Get a datum from database --------------------------
+
+// Get a datum function call
+function getDatum(userID, year, month, day) {
+	// Get the data
+	let trialVal = document.getElementById("trialVal");
+	let tempVal = document.getElementById("tempVal");
+	let sgVal = document.getElementById("sgVal");
+	let brixVal = document.getElementById("brixVal");
+	let massVal = document.getElementById("massVal");
+
+	const dbref = ref(db);
+
+	get(child(dbref, `users/${userID}/data/${trialNum}/${temp}`))
+		.then((snapshot) => {
+			if (snapshot.exists()) {
+				trialVal.textContent = trialNum;
+				tempVal.textContent = temp;
+				sgVal.textContent = snapshot.val();
+				brixVal.textContent = snapshot.val();
+				massVal.textContent = snapshot.val();
+			} else {
+				alert("No data available");
+			}
+		})
+		.catch((error) => {
+			alert(`Error: ${error.code} - ${error.message}`);
+		});
+}
+
+document.getElementById("get").onclick = function () {
+	const trialNum = document.getElementById("getTrial").value;
+	const temp = document.getElementById("getTemp").value;
+
+	getDatum(currentUser.uid, trialNum, temp);
+}
 
 // Get a data set function call
-async function getDataSet(userID, year, month){
+async function getDataSet(userID, temp){
 	let tempVal = document.getElementById('setTempVal');
 	//let monthVal = document.getElementById('setMonthVal');
 
 	tempVal.textContent = `Temperature: ${temp}`;
 	//monthVal.textContent = `Month: ${month}`;
 
-	const days = []
 	const temps = []
+	const sg = []
+	const brix = []
+	const mass = []
 	const tbodyEL = document.getElementById('tbody-2'); //select <tbody> from table
 
 	const dbref = ref(db);
 
 	//wait for data to be pulled from FRD
 	//provide path through the nodes to the data
-	await get(child(dbref, 'users/' + userID + '/data/' + year + '/' + month)).then((snapshot)=>{
+	await get(child(dbref, 'users/' + userID + '/data/' + trialNum + '/' + temp)).then((snapshot)=>{
 		if(snapshot.exists()){
 			console.log(snapshot.val());
 
 			snapshot.forEach(child =>{
 				console.log(child.key, child.val());
 				// push values to the correct arrays
-				days.push(child.key);
-				temps.push(child.val());
+				temps.push(child.key);
+				sg.push(child.val());
+				brix.push(child.val());
+				mass.push(child.val());
 			});
 		}
 		else{
@@ -243,38 +284,3 @@ window.onload = function () {
 		});
 	}
 };
-
-// ------------------------- Set Welcome Message -------------------------
-// Get a datum function call
-function getDatum(userID, year, month, day) {
-	// Get the data
-	let yearVal = document.getElementById("yearVal");
-	let monthVal = document.getElementById("monthVal");
-	let dayVal = document.getElementById("dayVal");
-	let tempVal = document.getElementById("tempVal");
-
-	const dbref = ref(db);
-
-	get(child(dbref, `users/${userID}/data/${year}/${month}/${day}`))
-		.then((snapshot) => {
-			if (snapshot.exists()) {
-				yearVal.textContent = year;
-				monthVal.textContent = month;
-				dayVal.textContent = day;
-				tempVal.textContent = snapshot.val();
-			} else {
-				alert("No data available");
-			}
-		})
-		.catch((error) => {
-			alert(`Error: ${error.code} - ${error.message}`);
-		});
-}
-
-document.getElementById("get").onclick = function () {
-	const year = document.getElementById("getYear").value;
-	const month = document.getElementById("getMonth").value;
-	const day = document.getElementById("getDay").value;
-
-	getDatum(currentUser.uid, year, month, day);
-}
